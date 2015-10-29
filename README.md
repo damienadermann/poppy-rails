@@ -1,8 +1,6 @@
-# Poppy::Rails
+# Poppy Rails
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/poppy/rails`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A simple and flexible enumeration implementation for ActiveRecord
 
 ## Installation
 
@@ -20,9 +18,67 @@ Or install it yourself as:
 
     $ gem install poppy-rails
 
+**optional**
+
+```bash
+$ rails g poppy:install
+```
+
+will add an initializer that calls
+
+```ruby
+ActiveRecord::Base.include(Poppy::ActiveRecord)
+``` 
+
+this can be omitted by manually including the adapter in each model that uses Poppy
+
+```ruby
+class Sandwhich < ActiveRecord::Base
+	include Poppy::ActiveRecord
+	
+	enumeration :bread, of: Bread
+	#...
+end
+```
+
+
 ## Usage
 
-TODO: Write usage instructions here
+
+### Model
+```ruby
+class Sandwhich < ActiveRecord::Bas
+	enumeration :bread, of: Bread
+	enumeration :cheeses, as: :array, of: Cheese
+end
+```
+Adding an enumeration to an active_record model will add an inclusion validation. There is no support for nullable enumerations. This is an intended design decision. If you would like this functionality you will need to add a null value
+E.g. ` Bread::None `
+
+If the enumeration is an array then all values in the array must be of that enumeration.
+
+### Migrations
+
+```ruby
+class AddJobKindsToJob < ActiveRecord::Migration
+  def change
+    add_column :sandwhiches, :bread, :string, default: Bread::WHITE
+    add_column :sandwhiches, :cheeses, :string, array: true, default: []
+  end
+end
+```
+
+### In the wild
+
+```ruby
+> sandwhich = Sandwhich.new(bread: Bread::WHITE, cheeses: [Cheese::CHEDDAR])
+> sandwhich.bread
+=> Bread::WHITE
+
+> sandwhich.cheeses
+=> [Cheese::CHEDDAR]
+```
+
 
 ## Development
 
@@ -38,4 +94,10 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
+
+##TODO
+- Add AR integration
+- Add enum validator
+- Add array enum validator
 
