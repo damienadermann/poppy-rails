@@ -15,7 +15,7 @@ module Poppy
 
       def type_cast(value)
         return value if enum.valid?(value)
-        enum.enum_for(value.to_sym) or raise InvalidEnumerationError
+        enum.enum_for(value.to_sym)
       end
 
       def type_cast_for_database(value)

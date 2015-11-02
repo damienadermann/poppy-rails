@@ -26,10 +26,20 @@ RSpec.describe Poppy::ActiveRecord do
         end
       end
 
-      context 'with invalid user value' do
-        let(:sandwhich) { Sandwhich.create(bread: 'wrong') }
-        specify 'will save and retrieve an enumeration value' do
-          expect{ sandwhich }.to raise_error(Poppy::ActiveRecord::EnumType::InvalidEnumerationError)
+      describe 'validation' do
+        context 'as value' do
+          context 'with invalid user value' do
+            pending
+            let(:sandwhich) { Sandwhich.create(bread: 'wrong') }
+            specify 'will save and retrieve an enumeration value' do
+              expect(sandwhich.errors[:bread]).
+                to eq(['is not included in the list'])
+            end
+          end
+        end
+
+        context 'as array' do
+          pending
         end
       end
     end
