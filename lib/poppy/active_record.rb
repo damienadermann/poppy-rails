@@ -7,15 +7,19 @@ module Poppy
     PostgreSQLAdapter = ::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
     PostgreSQLArrayType = ::ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Array
 
+    COLUMN_TYPES = %i(value array)
     DEFAULT_COLUMN_TYPE = :value
 
     class InvalidColumnTypeForAdapterTypeError < StandardError; end
+
+    include Poppy::Rails::Validators
 
     def self.included(base)
       base.send :extend, ClassMethods
     end
 
     module ClassMethods
+
       def enumeration(attribute_name, **options)
         options.assert_valid_keys(:as, :of)
         column_type = options.fetch(:as, DEFAULT_COLUMN_TYPE)
@@ -35,7 +39,7 @@ module Poppy
         when :value
           validates attribute_name, inclusion: { in: enumeration.list }
         when :array
-          #TODO add array validation
+          validates attribute_name, enum_array: { as: enumeration }
         end
       end
 

@@ -46,6 +46,7 @@ RSpec.describe Poppy::ActiveRecord do
       let(:fillings) { [Filling::HAM, Filling::CHICKEN] }
       specify 'will save and retrieve enumeration values' do
         expect(sandwhich.reload.fillings).to match_array(fillings)
+        expect(sandwhich.errors).to be_empty
       end
 
       context 'with user entered value' do
@@ -58,10 +59,10 @@ RSpec.describe Poppy::ActiveRecord do
 
       describe 'validation' do
         context 'with invalid user value' do
-          let(:bread) { 'wrong' }
+          let(:fillings) { ['wrong'] }
           specify 'will save and retrieve an enumeration value' do
             expect(sandwhich.errors[:fillings]).
-              to eq(['not all items are in the list'])
+              to eq(['must only only contain values of type Filling'])
           end
         end
       end
