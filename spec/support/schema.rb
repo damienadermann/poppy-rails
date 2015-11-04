@@ -3,6 +3,6 @@ ActiveRecord::Schema.define do
 
   create_table :sandwhiches, force: true do |t|
     t.string :bread
-    t.string :fillings
+    t.string :fillings, array: true, default: []
   end
 end
