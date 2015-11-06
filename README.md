@@ -1,6 +1,17 @@
 # Poppy Rails
 
-A simple and flexible enumeration implementation for ActiveRecord
+A simple and flexible enumeration implementation for ActiveRecord. 
+
+
+*This release is very alpha. Use at your own risk but I would appreciate feedback.
+
+## Description
+
+Inspired by [enumerate_it](https://github.com/cassiomarques/enumerate_it), Poppy is a simple implementation of enumerations with minimal goodies. Poppy offers a few nice features:
+
+- Enumeration values are objects and can respond to methods
+- Works with postreSQL arrays with validations
+- Simple API
 
 ## Installation
 
@@ -20,11 +31,7 @@ Or install it yourself as:
 
 **optional**
 
-```bash
-$ rails g poppy:install
-```
-
-will add an initializer that calls
+Add an initializer that calls
 
 ```ruby
 ActiveRecord::Base.include(Poppy::ActiveRecord)
@@ -58,6 +65,8 @@ E.g. ` Bread::None `
 If the enumeration is an array then all values in the array must be of that enumeration.
 
 ### Migrations
+
+Just regular rails migrations
 
 ```ruby
 class AddJobKindsToJob < ActiveRecord::Migration
@@ -94,7 +103,7 @@ $ createdb poppy-rails-test
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/poppy-rails. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/damienadermann/poppy-rails. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 
 
 ## License
@@ -103,7 +112,8 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 
 ##TODO
-- Add AR integration
-- Add enum validator
-- Add array enum validator
+- Add AR initializer
+- Add travis.yml
+- Add badges
+- Add docs
 

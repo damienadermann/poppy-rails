@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["damienadermann@gmail.com"]
 
   spec.summary       = %q{Ruby On Rails integration for Poppy Enumerations}
-  spec.description   = %q{Simple Polymorphic enumerations for Ruby on Rails. Inspired by Enumerate_it, not inspired by ActiveRecord enum}
+  spec.description   = %q{Simple Polymorphic enumerations for Ruby on Rails. Inspired by Enumerate_it, not inspired by ActiveRecord's enum}
   spec.homepage      = "https://github.com/damienadermann/poppy-rails"
   spec.license       = "MIT"
 
