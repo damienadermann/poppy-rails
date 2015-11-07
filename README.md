@@ -2,6 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/poppy-rails.svg)](http://rubygems.org/gems/poppy)
 [![Build Status](https://travis-ci.org/damienadermann/poppy-rails.svg?branch=master)](http://travis-ci.org/damienadermann/poppy-rails)
+[![Code Climate](https://codeclimate.com/github/damienadermann/poppy-rails/badges/gpa.svg)](https://codeclimate.com/github/damienadermann/poppy-rails)
 
 A simple and flexible enumeration implementation for ActiveRecord using [poppy](https://github.com/damienadermann/poppy).
 
