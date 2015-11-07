@@ -5,16 +5,13 @@
 
 A simple and flexible enumeration implementation for ActiveRecord using [poppy](https://github.com/damienadermann/poppy).
 
-
-*This release is very alpha. Use at your own risk but I would appreciate feedback.
-
 ## Description
 
 Inspired by [enumerate_it](https://github.com/cassiomarques/enumerate_it), Poppy is a simple implementation of enumerations with minimal goodies. Poppy offers a few nice features:
 
-- Enumeration values are objects and can respond to methods
+- Enumeration values are objects and can respond to any defined methods
 - Works with postreSQL arrays with validations
-- Simple API
+- Simple
 
 ## Installation
 
@@ -54,18 +51,25 @@ end
 
 ## Usage
 
+### Enumeration
+
+```ruby
+#app/enumerations/bread.rb
+class Bread < Poppy::Enum
+  values :white, :multigrain, :gluten_free
+end
+
+```
+
 
 ### Model
 ```ruby
-class Sandwhich < ActiveRecord::Bas
+class Sandwhich < ActiveRecord::Base
 	enumeration :bread, of: Bread
-	enumeration :cheeses, as: :array, of: Cheese
 end
 ```
 Adding an enumeration to an active_record model will add an inclusion validation. There is no support for nullable enumerations. This is an intended design decision. If you would like this functionality you will need to add a null value
 E.g. ` Bread::None `
-
-If the enumeration is an array then all values in the array must be of that enumeration.
 
 ### Migrations
 
@@ -75,7 +79,6 @@ Just regular rails migrations
 class AddJobKindsToJob < ActiveRecord::Migration
   def change
     add_column :sandwhiches, :bread, :string, default: Bread::WHITE
-    add_column :sandwhiches, :cheeses, :string, array: true, default: []
   end
 end
 ```
@@ -86,6 +89,56 @@ end
 > sandwhich = Sandwhich.new(bread: Bread::WHITE, cheeses: [Cheese::CHEDDAR])
 > sandwhich.bread
 => Bread::WHITE
+```
+
+### HTML forms
+
+Rails form helpers
+
+```erb
+<%= simple_form_for @bread do |f| %>
+	<%= f.select :bread, Bread.collection %>
+<% end %>
+```
+
+SimpleForm
+
+```erb
+<%= simple_form_for @sandwhich do |f| %>
+  <%= f.input :bread, collection: Bread.collection %>
+<% end %>
+```
+
+
+### Postgres Array Support
+
+
+```ruby
+#app/enuerations/cheese.rb
+class Cheese < Poppy::Enum
+	values :cheddar, :swiss, :mozzarella
+end
+```
+
+```ruby
+class Sandwhich < ActiveRecord::Base
+	enumeration :cheeses, as: :array, of: Cheese
+end
+```
+
+If the enumeration is an array then all values in the array must be of that enumeration. If they aren't validation will fail just like any other ActiveModel validation.
+
+```ruby
+class AddJobKindsToJob < ActiveRecord::Migration
+  def change
+    add_column :sandwhiches, :cheeses, :string, array: true, default: []
+  end
+end
+```
+
+
+```ruby
+> sandwhich = Sandwhich.new(cheeses: [Cheese::CHEDDAR])
 
 > sandwhich.cheeses
 => [Cheese::CHEDDAR]
@@ -101,7 +154,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 Specs depend rely on a postgres database running to test the array support.
 
 ```bash
-$ createdb poppy-rails-test
+$ createdb poppy_rails_test
 ```
 
 ## Contributing
@@ -116,7 +169,5 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 ##TODO
 - Add AR initializer
-- Add travis.yml
-- Add badges
 - Add docs
 
