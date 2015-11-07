@@ -1,6 +1,9 @@
 # Poppy Rails
 
-A simple and flexible enumeration implementation for ActiveRecord. 
+[![Gem Version](https://badge.fury.io/rb/poppy-rails.svg)](http://rubygems.org/gems/poppy)
+[![Build Status](https://travis-ci.org/damienadermann/poppy-rails.svg?branch=master)](http://travis-ci.org/damienadermann/poppy-rails)
+
+A simple and flexible enumeration implementation for ActiveRecord using [poppy](https://github.com/damienadermann/poppy).
 
 
 *This release is very alpha. Use at your own risk but I would appreciate feedback.
