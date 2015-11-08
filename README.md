@@ -36,16 +36,16 @@ Add an initializer that calls
 
 ```ruby
 ActiveRecord::Base.include(Poppy::ActiveRecord)
-``` 
+```
 
 this can be omitted by manually including the adapter in each model that uses Poppy
 
 ```ruby
 class Sandwhich < ActiveRecord::Base
-	include Poppy::ActiveRecord
-	
-	enumeration :bread, of: Bread
-	#...
+  include Poppy::ActiveRecord
+
+  enumeration :bread, of: Bread
+  #...
 end
 ```
 
@@ -66,7 +66,7 @@ end
 ### Model
 ```ruby
 class Sandwhich < ActiveRecord::Base
-	enumeration :bread, of: Bread
+  enumeration :bread, of: Bread
 end
 ```
 Adding an enumeration to an active_record model will add an inclusion validation. There is no support for nullable enumerations. This is an intended design decision. If you would like this functionality you will need to add a null value
@@ -74,15 +74,26 @@ E.g. ` Bread::None `
 
 ### Migrations
 
-Just regular rails migrations
+Just regular rails migrations, however the because enumerations are objects we can't just persist the enumeration value directly. We need to convert it to the appropriate database value using the EnumType class
+
+```ruby
+> Poppy::ActiveRecord::EnumType.new(enum: Bread).type_cast_for_database(Bread::WHITE)
+=> :white
+```
+
+As you can see this code is rather verbose and its pretty obvious what its returning, we can just pass in the symbol associated with the enum value. (This works because there is currently only one way to persist enumerations, as a string. If integer based enumerations are implemented then the more verbose option is required).
 
 ```ruby
 class AddJobKindsToJob < ActiveRecord::Migration
   def change
-    add_column :sandwhiches, :bread, :string, default: Bread::WHITE
+    add_column :sandwhiches, :bread, :string, default: :white
   end
 end
 ```
+
+Database persistence has been designed to use string based persistence. This gives two main advantages.
+1. Its clear what value is used when looking at the database row directly.
+2. Integer based enumerations require explicitly setting an integer value, which has no relation to the data itself. Integers can be implicitly assigned to an enumeration but this breaks once an enumeration is deleted or the order that they are defined is changed.
 
 ### In the wild
 
@@ -98,7 +109,7 @@ Rails form helpers
 
 ```erb
 <%= simple_form_for @bread do |f| %>
-	<%= f.select :bread, Bread.collection %>
+  <%= f.select :bread, Bread.collection %>
 <% end %>
 ```
 
@@ -117,13 +128,13 @@ SimpleForm
 ```ruby
 #app/enuerations/cheese.rb
 class Cheese < Poppy::Enum
-	values :cheddar, :swiss, :mozzarella
+  values :cheddar, :swiss, :mozzarella
 end
 ```
 
 ```ruby
 class Sandwhich < ActiveRecord::Base
-	enumeration :cheeses, as: :array, of: Cheese
+  enumeration :cheeses, as: :array, of: Cheese
 end
 ```
 
